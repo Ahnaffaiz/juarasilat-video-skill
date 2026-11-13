@@ -13,7 +13,7 @@ Skill Codex untuk membuat video bedah teknik pencak silat vertikal 9:16 dengan i
 - Membuat film vertikal 1080×1920 bergaya Sports Telestrator: full-bleed, coretan teknik, kartu kaca, stabilo merah, subtitle, watermark, dan CTA beranimasi.
 - Menjaga hook tetap berfokus pada tesis teknik utama dan memakai nama atlet secara konsisten setelah identitasnya diketahui.
 - Memeriksa headline agar tidak terpotong, blok merah subtitle agar selalu menutup tepat satu kata utuh, memilih freeze dari beberapa frame sumber paling tajam, dan mengkalibrasi coretan pada anatomi di frame aktual.
-- Mengaudit 1 detik awal setiap baris pada source, stem, dan master untuk false start yang dapat disembunyikan Whisper. Jika sumber memiliki fragmen palsu, pilih take bersih atau lakukan sweep onset 20 milidetik; `preserve_full_take` hanya dipakai setelah sumber benar-benar terdengar bersih.
+- Mengaudit 1 detik awal setiap baris pada source, stem, dan master. Timestamp kata Whisper tidak boleh dijadikan titik potong audio: seluruh baris harus diambil dari jeda alami dengan pre-roll asli minimal 0,12 detik, tanpa onset sweep, crop fonem, fade-in, perubahan tempo, atau hening sintetis.
 - Menampilkan kredit layar hanya ketika URL/channel sumber eksplisit dan terverifikasi; watermark baku berukuran ±190 px dengan opasitas ±20% pada kanvas 1080.
 - Menginterpolasi serta meningkatkan resolusi frame dengan pipeline VideoToolbox.
 - Melakukan QA visual dan audio, termasuk contact sheet, deteksi frame hitam, subtitle, loudness, dan true peak.
@@ -152,5 +152,5 @@ Setiap produksi ditujukan menghasilkan:
 SHA-256 `juarasilat-video.skill`:
 
 ```text
-5455445d62bbc78bf1533735e220ae2afcfef827ed43490b80bf74b0ec7933b8
+a3c1cd4bc09dfdfa739c54a431e88306264f8a660b18a448a52d8d02c8fd1dee
 ```
