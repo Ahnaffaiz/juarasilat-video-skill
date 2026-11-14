@@ -18,6 +18,12 @@ Skill Codex untuk membuat video bedah teknik pencak silat vertikal 9:16 dengan i
 - Menginterpolasi serta meningkatkan resolusi frame dengan pipeline VideoToolbox.
 - Melakukan QA visual dan audio, termasuk contact sheet, deteksi frame hitam, subtitle, loudness, dan true peak.
 - Menghasilkan paket akhir berupa video MP4, subtitle SRT, poster, treatment, fakta analisis, dan kredit.
+- Menerapkan alur tetap: **Hook → video asli serangan → pembahasan → CTA**. Video asli 1× tanpa freeze hadir langsung setelah hook.
+- Memblokir render master bila inventaris teks belum lengkap, teks keluar zona x 60–960/menutup aksi, atau satu coretan belum diverifikasi pada onset, penuh, dan akhir dengan pasangan still normal/target.
+
+## Pustaka aset bersama
+
+Folder [`../assets/`](../assets/README.md) berisi CTA transparan ProRes 4444 dan WebM alfa, kode animasi, logo, font, narasi CTA, musik, SFX, serta kode telestrator. Skill mengarahkan proyek baru untuk memakai komponen itu dan menautkannya sebagai `shared-assets` bila folder tersedia. Pustaka media besar ini berada di proyek JuaraSilatVideo dan **tidak disalin ke arsip `.skill`**.
 
 ## Isi paket
 
@@ -25,7 +31,7 @@ File [`juarasilat-video.skill`](./juarasilat-video.skill) adalah arsip skill yan
 
 - `SKILL.md` — instruksi utama dan aturan workflow.
 - `references/` — panduan analisis, naskah, gaya bahasa, suara, visual, branding, build, dan evaluasi.
-- `scripts/` — pembuat proyek baru dan generator contact sheet.
+- `scripts/` — pembuat proyek baru, generator contact sheet, dan gate rilis visual untuk inventaris teks/overlap/coretan.
 - `assets/film-template/` — template film, build script, mixer audio, pemotong voice-over, subtitle, master HQ, font, dan logo.
 - `assets/examples/azrul-fitrah/` — contoh treatment, fakta, naskah, kredit, dan poster.
 
@@ -152,5 +158,5 @@ Setiap produksi ditujukan menghasilkan:
 SHA-256 `juarasilat-video.skill`:
 
 ```text
-a3c1cd4bc09dfdfa739c54a431e88306264f8a660b18a448a52d8d02c8fd1dee
+2c781580e7abf1ca03f4148994ed1bbd10159ed5df92114b5c479151759370aa
 ```
