@@ -11,7 +11,7 @@ Skill Codex untuk membuat video bedah teknik pencak silat vertikal 9:16 dengan i
 - Menulis naskah sekitar 200–230 kata dengan gaya pelatih yang serius, tegas, dan ringkas.
 - Menyiapkan voice-over ElevenLabs, pemotongan per kalimat, dan verifikasi transkrip dengan Whisper.
 - Membuat film vertikal 1080×1920 bergaya Sports Telestrator: full-bleed, coretan teknik, kartu kaca, stabilo merah, subtitle, watermark, dan CTA beranimasi.
-- Menjaga hook tetap berfokus pada tesis teknik utama dan memakai nama atlet secara konsisten setelah identitasnya diketahui.
+- Mewajibkan setiap hook dimulai dengan pola **“Beginilah kecerdasan …”**, tetap berfokus pada tesis teknik utama, dan memakai nama atlet secara konsisten setelah identitasnya diketahui.
 - Memeriksa headline agar tidak terpotong, blok merah subtitle agar selalu menutup tepat satu kata utuh, memilih freeze dari beberapa frame sumber paling tajam, dan mengkalibrasi coretan pada anatomi di frame aktual.
 - Mengaudit 1 detik awal setiap baris pada source, stem, dan master. Timestamp kata Whisper tidak boleh dijadikan titik potong audio: seluruh baris harus diambil dari jeda alami dengan pre-roll asli minimal 0,12 detik, tanpa onset sweep, crop fonem, fade-in, perubahan tempo, atau hening sintetis.
 - Menampilkan kredit layar hanya ketika URL/channel sumber eksplisit dan terverifikasi; watermark baku berukuran ±190 px dengan opasitas ±20% pada kanvas 1080.
@@ -158,5 +158,5 @@ Setiap produksi ditujukan menghasilkan:
 SHA-256 `juarasilat-video.skill`:
 
 ```text
-2c781580e7abf1ca03f4148994ed1bbd10159ed5df92114b5c479151759370aa
+fb0110858e2d0c26590b3d615cb6db5b219d2f86a01ecc3f2a46e06a2b0f6f4c
 ```
