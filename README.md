@@ -218,5 +218,5 @@ Satu TOLAK atau satu bukti yang tidak dibuka (**NOT CHECKED**) memblokir serah. 
 SHA-256 `juarasilat-video.skill`:
 
 ```text
-d92ea68f5fffa526264902bcac57268619d0105b8c2f234840580d2fd097bc12
+32c86c24cd2f761ad37a93b2130c32d4d00d95d1381b146f857b1de0298bc7c4
 ```
