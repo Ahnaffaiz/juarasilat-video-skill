@@ -1,0 +1,12 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Juara Silat CTA Transparan</title>
+<style>
+@font-face{font-family:Jak;src:url(fonts/jak800.woff2);font-weight:800}
+@font-face{font-family:Cond;src:url(fonts/cond700.woff2);font-weight:700}
+html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block;background:transparent}
+</style></head><body><canvas id="cta" width="1080" height="1920"></canvas>
+<script src="cta.js"></script><script>
+const canvas=document.getElementById('cta'),ctx=canvas.getContext('2d');let logo;
+function image(url){return new Promise((ok,fail)=>{const a=new Image();a.onload=()=>ok(a);a.onerror=fail;a.src=url})}
+async function render(t){ctx.clearRect(0,0,1080,1920);JuaraSilatFollowCTA.drawForeground(ctx,t,logo)}
+(async()=>{await Promise.all([document.fonts.load('800 48px Jak'),document.fonts.load('700 44px Cond')]);logo=await image('logo-red.png');await render(0);window.render=render;window.READY=true})();
+</script></body></html>

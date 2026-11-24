@@ -20,20 +20,44 @@ Skill Codex untuk membuat video bedah teknik pencak silat vertikal 9:16 dengan i
 - Menghasilkan paket akhir berupa video MP4, subtitle SRT, poster, treatment, fakta analisis, dan kredit.
 - Menerapkan alur tetap: **Hook → video asli serangan → pembahasan → CTA**. Video asli 1× tanpa freeze hadir langsung setelah hook.
 - Memblokir render master bila inventaris teks belum lengkap, teks keluar zona x 60–960/menutup aksi, atau satu coretan belum diverifikasi pada onset, penuh, dan akhir dengan pasangan still normal/target.
+- Memblokir render master bila crop memotong badan pesilat, ukuran teks keluar rentang perannya, atau pasangan judul↔sub judul tidak proporsional.
+- Mewajibkan **pass reviewer terpisah** sebelum serah: crop jernih tanpa badan terpotong, coretan tepat pada anatomi yang disebut, tanpa cacat editing/audio, dan ukuran teks yang tidak melewati batas frame maupun mengecil tanpa perspektif.
 
-## Pustaka aset bersama
+## Pustaka aset bersama (ikut terinstall)
 
-Folder [`../assets/`](../assets/README.md) berisi CTA transparan ProRes 4444 dan WebM alfa, kode animasi, logo, font, narasi CTA, musik, SFX, serta kode telestrator. Skill mengarahkan proyek baru untuk memakai komponen itu dan menautkannya sebagai `shared-assets` bila folder tersedia. Pustaka media besar ini berada di proyek JuaraSilatVideo dan **tidak disalin ke arsip `.skill`**.
+Folder [`assets/`](./assets/README.md) adalah pustaka reusable: logo, font, CTA transparan WebM alfa beserta kodenya, stem audio CTA, SFX, bed musik, dan kode telestrator/enhance frame. Pustaka ini **ikut di dalam arsip `.skill`** sebagai `assets/shared/`, jadi satu kali unzip sudah menyertakan asetnya — tidak perlu menyalin apa pun dari mesin lain.
+
+Urutan pencarian yang dipakai skill dan `scripts/new_film.sh` (ditautkan sebagai `shared-assets/` di folder film):
+
+1. `$JUARASILAT_ASSETS` bila pustaka sengaja ditaruh di tempat lain
+2. `<skill>/assets/shared/` — isi paket, tersedia langsung setelah instalasi
+3. pustaka asli di mesin pemilik
+
+Satu file tidak ikut: `follow-overlay.mov` (ProRes 4444 alfa, 188 MB) melewati batas 100 MB per file di Git, jadi disediakan sebagai **release asset** pada tag [`assets-latest`](https://github.com/Ahnaffaiz/juarasilat-video-skill/releases/tag/assets-latest). Versi `follow-overlay.webm` (VP9 alfa, 619 KB, 1080×1920, 30 fps) sudah ada di paket dan cukup untuk render berbasis kode. Butuh ProRes untuk NLE:
+
+```bash
+sh "$HOME/.agents/skills/juarasilat-video/scripts/fetch_prores.sh"
+```
 
 ## Isi paket
 
 File [`juarasilat-video.skill`](./juarasilat-video.skill) adalah arsip skill yang berisi:
 
 - `SKILL.md` — instruksi utama dan aturan workflow.
-- `references/` — panduan analisis, naskah, gaya bahasa, suara, visual, branding, build, dan evaluasi.
-- `scripts/` — pembuat proyek baru, generator contact sheet, dan gate rilis visual untuk inventaris teks/overlap/coretan.
-- `assets/film-template/` — template film, build script, mixer audio, pemotong voice-over, subtitle, master HQ, font, dan logo.
+- `references/` — panduan analisis, naskah, gaya bahasa, suara, visual, branding, build, evaluasi, dan **review**.
+- `scripts/` — pembuat proyek baru, generator contact sheet, gate rilis visual (teks, crop, coretan), gate reviewer atas master, dan pengambil ProRes CTA.
+- `assets/film-template/` — template film, build script, mixer audio, pemotong voice-over, subtitle, master HQ, font, logo, `review.json`, dan `REVIEW.md`.
 - `assets/examples/azrul-fitrah/` — contoh treatment, fakta, naskah, kredit, dan poster.
+- `assets/shared/` — pustaka aset bersama (lihat bagian di atas).
+
+## Isi repository
+
+| Path | Isi |
+|---|---|
+| `juarasilat-video.skill` | paket skill siap unzip, sudah memuat `assets/shared/` |
+| `assets/` | sumber pustaka aset bersama (dipakai `pack.sh`, bisa diambil per file lewat raw URL) |
+| `install.sh` | pasang paket ke folder skill personal atau satu repository |
+| `pack.sh` | bangun ulang `juarasilat-video.skill` dari folder skill yang sedang dipakai |
 
 ## Kebutuhan
 
@@ -74,12 +98,22 @@ Menurut [dokumentasi resmi OpenAI tentang Skills](https://learn.chatgpt.com/docs
 
 ### Instalasi personal
 
-Skill tersedia untuk semua proyek milik pengguna:
+Skill dan seluruh pustaka asetnya sekaligus:
 
 ```bash
 git clone https://github.com/Ahnaffaiz/juarasilat-video-skill.git
-mkdir -p "$HOME/.agents/skills"
-unzip -o juarasilat-video-skill/juarasilat-video.skill -d "$HOME/.agents/skills"
+```
+
+```bash
+sh juarasilat-video-skill/install.sh
+```
+
+`install.sh` memasang paket ke setiap folder skill personal yang ditemukan (`$HOME/.agents/skills` untuk Codex, `$HOME/.claude/skills` untuk Claude Code). Pilih target secara eksplisit dengan `--codex`, `--claude`, atau `--repo <dir>`; tambahkan `--with-prores` untuk sekaligus mengunduh overlay ProRes 188 MB.
+
+Tanpa skrip, unzip manual tetap cukup karena aset ada di dalam paket:
+
+```bash
+mkdir -p "$HOME/.agents/skills" && unzip -o juarasilat-video-skill/juarasilat-video.skill -d "$HOME/.agents/skills"
 ```
 
 Struktur akhirnya harus seperti ini:
@@ -91,6 +125,10 @@ $HOME/.agents/skills/
     ├── references/
     ├── scripts/
     └── assets/
+        ├── film-template/
+        ├── examples/
+        ├── brand/
+        └── shared/        # pustaka aset bersama
 ```
 
 ### Instalasi untuk satu repository
@@ -143,7 +181,29 @@ Setiap produksi ditujukan menghasilkan:
 - `poster.jpg` — poster/thumbnail.
 - `TREATMENT.md` — treatment kreatif.
 - `FACTS.md` — fakta dan tabel fase hasil analisis.
+- `REVIEW.md` — verdict reviewer R1–R4 beserta temuannya.
 - `CREDITS` — kredit sumber dan produksi.
+
+## Pass reviewer (wajib sebelum serah)
+
+Reviewer adalah tahap tersendiri, dijalankan setelah master selesai dan **bukan** oleh pembuat film. Dua gate mekanis dulu, lalu pemeriksaan mata dan telinga atas seluruh bukti. Rincian: `references/review.md`.
+
+```bash
+node "$HOME/.agents/skills/juarasilat-video/scripts/visual_release_gate.mjs" <film> --size 1080x1920 --out <film>/out/visual-release-gate
+```
+
+```bash
+python3 "$HOME/.agents/skills/juarasilat-video/scripts/master_review.py" <film> --freeze 12.4-13.9,22.0-23.2
+```
+
+| # | Pemeriksaan | Yang diukur mesin | Yang wajib dilihat/didengar |
+|---|---|---|---|
+| R1 | Crop jernih, badan pesilat tidak terpotong | Kotak tubuh kedua atlet pada setiap segmen aksi dan setiap freeze; gagal bila menyentuh tepi kanvas, `whole: false`, atlet hilang, atau `bodySamples` tidak ada | Seluruh still `crop-*.jpg` dan contact sheet pada 100 %: kepala, tangan, pinggul, lutut, telapak, jarak |
+| R2 | Coretan tepat pada yang ditunjuk | Tiga fase per `id` (onset/full/end), `part` cocok, jarak ke target ≤ toleransi | Pasangan `*-normal.jpg`/`*-target.jpg` setiap `id` pada 100 % |
+| R3 | Tanpa cacat editing dan cacat audio | Frame hitam, freeze yang tidak dideklarasikan di `review.json`, duplikat frame >2 %, geometri/fps, −14 LUFS ±1, true peak ≤ −1 dBTP, clipping/DC, hening, pre-roll tiap baris ≥0,12 dtk | 1 dtk awal setiap baris pada source/stem/master, kemulusan peralihan freeze, sinkron subtitle |
+| R4 | Ukuran teks dan perspektif judul vs sub judul | Glyph di x 60–960, blok ≤10 % frame, overlap aksi ≤8 %, ukuran render dalam rentang perannya, batas mutlak 16 px, judul ≥1,25× sub dan sub ≥0,30× judul lewat `pairWith` | `typeScale` bersama still-nya: judul memimpin, sub tetap terbaca, tidak ada huruf terpotong |
+
+Satu TOLAK atau satu bukti yang tidak dibuka (**NOT CHECKED**) memblokir serah. Perbaikan berarti mengubah crop, coretan, audio, atau ukuran teks — bukan menaikkan ambang gate.
 
 ## Catatan operasional
 
@@ -158,5 +218,5 @@ Setiap produksi ditujukan menghasilkan:
 SHA-256 `juarasilat-video.skill`:
 
 ```text
-fb0110858e2d0c26590b3d615cb6db5b219d2f86a01ecc3f2a46e06a2b0f6f4c
+d92ea68f5fffa526264902bcac57268619d0105b8c2f234840580d2fd097bc12
 ```
