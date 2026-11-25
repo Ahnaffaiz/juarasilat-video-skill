@@ -16,6 +16,7 @@ Skill Codex untuk membuat video bedah teknik pencak silat vertikal 9:16 dengan i
 - Mengaudit 1 detik awal setiap baris pada source, stem, dan master. Timestamp kata Whisper tidak boleh dijadikan titik potong audio: seluruh baris harus diambil dari jeda alami dengan pre-roll asli minimal 0,12 detik, tanpa onset sweep, crop fonem, fade-in, perubahan tempo, atau hening sintetis.
 - Menampilkan kredit layar hanya ketika URL/channel sumber eksplisit dan terverifikasi; watermark baku berukuran ±190 px dengan opasitas ±20% pada kanvas 1080.
 - Menginterpolasi serta meningkatkan resolusi frame dengan pipeline VideoToolbox.
+- Menjaga warna footage sumber tanpa color grading untuk saat ini; template tidak menerapkan filter brightness, contrast, saturation, atau unsharp pada master.
 - Melakukan QA visual dan audio, termasuk contact sheet, deteksi frame hitam, subtitle, loudness, dan true peak.
 - Menghasilkan paket akhir berupa video MP4, subtitle SRT, poster, treatment, fakta analisis, dan kredit.
 - Menerapkan alur tetap: **Hook → video asli serangan → pembahasan → CTA**. Video asli 1× tanpa freeze hadir langsung setelah hook.
